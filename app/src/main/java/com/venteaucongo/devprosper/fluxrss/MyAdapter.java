@@ -1,11 +1,13 @@
 package com.venteaucongo.devprosper.fluxrss;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,11 +43,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 .duration(700)
                 .repeat(0)
                 .playOn(holder.cardView);
-        FeedItem feedItem = list.get(position);
-        holder.title.setText(feedItem.getTitle());
-        holder.description.setText(feedItem.getDescription());
-        holder.pubDate.setText(feedItem.getPubDate());
-        Picasso.with(context).load(feedItem.getThumbnailUrl()).into(holder.imageView);
+        final FeedItem item = list.get(position);
+        holder.title.setText(item.getTitle());
+        holder.description.setText(item.getDescription());
+        holder.pubDate.setText(item.getPubDate());
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context, DetailsActivity.class);
+                i.putExtra("Link", item.getLink());
+                context.startActivity(i);
+            }
+        });
+        Picasso.with(context).load(item.getThumbnailUrl()).into(holder.imageView);
     }
 
     @Override
